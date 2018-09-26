@@ -1,0 +1,139 @@
+.buttonEdit {
+    background-color: #dddb4e;
+    opacity: 0.5;
+}
+
+.buttonEdit:hover {
+    background-color: yellow;
+    opacity: 1;
+}
+
+.buttonDelete {
+    background-color: lightsalmon;
+    opacity: 0.5
+}
+
+.buttonDelete:hover {
+    background-color: lightcoral;
+    opacity: 1
+}
+
+.buttonSave {
+    background-color: aquamarine;
+    font-family: Courier, serif;
+}
+
+.buttonSave:hover {
+    background-color: lightgreen;
+    font-family: Courier, serif;
+}
+
+.button {
+    width: 50px;
+}
+
+.searchInput {
+    width: 145px;
+    font-family: Courier, serif;
+    font-size: 12px;
+}
+
+.borders {
+    border-bottom: 1px solid;
+    border-top: 1px solid;}
+
+.label {
+    width: 150px;
+    font-family: Courier, serif;
+}
+
+.input {
+    outline: none;
+    border: none;
+    background: none;
+    width: 150px;
+    font-family: Courier, serif;
+    font-size: 12px;
+}
+
+.boldInput {
+    font-weight: bold;
+    outline: none;
+    border: none;
+    background: none;
+    width: 150px;
+    font-family: Courier, serif;
+    font-size: 12px;
+}
+
+.disabledInput {
+    color: lightgrey;
+    outline: none;
+    border: none;
+    background: none;
+    width: 150px;
+    font-family: Courier, serif;
+    font-size: 12px;
+}
+
+.enabledButton {
+    background-color: #C4E5FF;
+    font-weight: bold;
+}
+
+.disabledButton {
+    background-color: aliceblue;
+}
+
+button {
+    border: none;
+    outline: none;
+    background-color: lightgreen;
+    font-family: Courier, serif;
+    font-size: 12px;
+}
+
+.paginationButton {
+    margin: 2px;
+    font-family: Courier, serif;
+    font-size: 14px;
+}
+
+.inline {
+    display: inline-table;
+}
+
+.hintBlock {
+    border: 3px dashed darkcyan;
+    padding: 50px;
+    position: absolute;
+    font-family: Courier, serif;
+    font-size: 14px;
+    margin-left: 50px;
+    text-align: left;
+    max-width: 500px;
+}
+
+.addContainer {
+    border: 2px dashed darkRed;
+    margin-top: 5px;
+    padding: 10px;
+    font-family: Courier, serif;
+    font-size: 14px;
+    text-align: left;
+    text-decoration: grey
+}
+
+.newValueInput {
+    width: 200px;
+    font-family: Courier, serif;
+    font-size: 18px;
+    padding: 2px;
+    margin-right: 2px;
+}
+
+.add-button {
+    font-family: Courier, serif;
+    font-size: 18px;
+}
+
