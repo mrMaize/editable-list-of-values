@@ -34,7 +34,8 @@ function data(state = {}, action) {
                 ...state,
                 filteredData: getFilteredDataByFilters(state.data, action.filters.label, action.filters.value),
                 label: action.filters.label,
-                value: action.filters.value
+                value: action.filters.value,
+                page: 1
             };
 
 
@@ -69,11 +70,13 @@ function data(state = {}, action) {
             };
 
         case actionTypes.ADD_DATA:
+
+            const filteredData = getFilteredDataByFilters(action.data, state.label, state.value);
             return {
                 ...state,
                 data: action.data,
-                filteredData: getFilteredDataByFilters(action.data, state.label, state.value),
-                page: Math.ceil(action.data.length / state.rowsPerPage)
+                filteredData: filteredData,
+                page: Math.ceil(filteredData.length / state.rowsPerPage)
             };
 
         case actionTypes.DELETE_ROW:
@@ -101,13 +104,13 @@ function data(state = {}, action) {
                 ? desc
                 : asc;
 
-            const sortedData = quickSort(state.data, sortOrder);
+            //const sortedData = quickSort(state.data, sortOrder);
 
             return {
                 ...state,
                 sortOrder: sortOrder,
                 //data: sortData(state.data, sortOrder),
-                filteredData: getFilteredDataByFilters(sortedData, state.label, state.value)
+                filteredData: getFilteredDataByFilters(state.data, state.label, state.value)
             };
 
         default:
@@ -152,7 +155,3 @@ function getFilteredDataByFilters(data, label, value) {
 
     return filteredData;
 }
-
-
-
-

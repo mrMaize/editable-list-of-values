@@ -17,34 +17,6 @@ import * as actions from "../redux/actions/actions";
 )
 export default class Main extends React.Component {
 
-    state = {
-        value: '',
-        defaultValue: 10000
-    };
-
-    onChangeRange = (event) => {
-        this.setState({
-            value: event.target.value
-        })
-    };
-
-    onClickGenerateSet = () => {
-
-        if (this.state.value === '') {
-            this.props.dispatch(generateSet(this.state.defaultValue));
-
-        } else {
-            try {
-                const value = parseInt(this.state.value);
-                this.props.dispatch(generateSet(value));
-
-            } catch(e) {
-                alert('only numeric input is allowed');
-
-            }
-        }
-    };
-
     nextPage = () => {
         this.props.dispatch(actions.goToTheNextPage())
     };
@@ -69,12 +41,9 @@ export default class Main extends React.Component {
             data = this.props.state.data.filteredData.slice((this.props.state.data.page - 1) * this.props.state.data.rowsPerPage, this.props.state.data.page * this.props.state.data.rowsPerPage);
         }
 
-        return(
+        return (
             <div>
                 <div className="inline">
-                    <input placeholder={'10000'} type={'text'} onChange={this.onChangeRange} readOnly={this.props.state.data.data.length > 0}/>
-                    <button onClick={this.onClickGenerateSet} disabled={this.props.state.data.data.length > 0}>Generate</button>
-
                     {
                         this.props.state.data.data && this.props.state.data.data.length > 0 ? (
                             <div style={{
@@ -90,7 +59,10 @@ export default class Main extends React.Component {
                                     data.map((row, index) => (
                                         <tr key={index}>
                                             <td>
-                                                <Row row={row} index={(this.props.state.data.page - 1) * this.props.state.data.rowsPerPage + index} page={this.props.state.data.page} rowsPerPage={this.props.state.data.rowsPerPage}/>
+                                                <Row row={row}
+                                                     index={(this.props.state.data.page - 1) * this.props.state.data.rowsPerPage + index}
+                                                     page={this.props.state.data.page}
+                                                     rowsPerPage={this.props.state.data.rowsPerPage}/>
                                             </td>
                                         </tr>
                                     ))
@@ -101,11 +73,23 @@ export default class Main extends React.Component {
 
 
                                 {this.props.state.data.filteredData.length > this.props.state.data.rowsPerPage && <div>
-                                    <button className={"paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton")} disabled={this.disablePrevPageButton()} style={{ display: 'inline' }} onClick={this.firstPage}>{"<<"}</button>
-                                    <button className={"paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton")} disabled={this.disablePrevPageButton()} style={{ display: 'inline' }} onClick={this.prevPage}>{"<"}</button>
+                                    <button
+                                        className={"paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton")}
+                                        disabled={this.disablePrevPageButton()} style={{display: 'inline'}}
+                                        onClick={this.firstPage}>{"<<"}</button>
+                                    <button
+                                        className={"paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton")}
+                                        disabled={this.disablePrevPageButton()} style={{display: 'inline'}}
+                                        onClick={this.prevPage}>{"<"}</button>
                                     <div style={{padding: '5px', display: 'inline'}}>{this.props.state.data.page}</div>
-                                    <button className={"paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton")} style={{ display: 'inline' }} disabled={this.disableNextPageButton()} onClick={this.nextPage}>{">"}</button>
-                                    <button className={"paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton")} style={{ display: 'inline' }} disabled={this.disableNextPageButton()} onClick={this.lastPage}>{">>"}</button>
+                                    <button
+                                        className={"paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton")}
+                                        style={{display: 'inline'}} disabled={this.disableNextPageButton()}
+                                        onClick={this.nextPage}>{">"}</button>
+                                    <button
+                                        className={"paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton")}
+                                        style={{display: 'inline'}} disabled={this.disableNextPageButton()}
+                                        onClick={this.lastPage}>{">>"}</button>
                                 </div>}
                             </div>
                         ) : (
@@ -115,10 +99,9 @@ export default class Main extends React.Component {
                 </div>
 
                 <div className="inline hintBlock">
-                    <Hints />
+                    <Hints/>
 
                 </div>
-
 
 
             </div>

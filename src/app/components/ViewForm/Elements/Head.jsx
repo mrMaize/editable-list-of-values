@@ -26,20 +26,27 @@ export default class Head extends Component {
     }
 
     onKeyDown = (event) => {
+        if (event.key === "Enter") {
+            this.setFilters();
+        }
+    };
 
+    setFilters = () => {
         const label = this.refs.searchLabel.value;
         const value = this.refs.searchValue.value;
 
-        if (event.key === "Enter") {
-            this.props.dispatch(actions.setFilters({
-                label: label,
-                value: value
-            }))
-        }
+        this.props.dispatch(actions.setFilters({
+            label: label,
+            value: value
+        }))
     };
 
     onLabelClick = () => {
         this.props.dispatch(actions.setSortOrder());
+    };
+
+    onSearchClick = () => {
+        this.setFilters();
     };
 
 
@@ -62,6 +69,10 @@ export default class Head extends Component {
 
                                     <div className="inline">
                                         <input placeholder="Value to search" ref="searchValue" type="text" className="searchInput"/>
+                                    </div>
+
+                                    <div className="inline">
+                                        <button className="searchButton" onClick={this.onSearchClick}>Search</button>
                                     </div>
                                 </div>
                             </div>

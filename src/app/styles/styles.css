@@ -93,6 +93,17 @@ button {
     font-size: 12px;
 }
 
+.searchButton {
+    width: 105px;
+    background-color: dodgerblue;
+    color: #C4E5FF;
+}
+
+.searchButton:hover {
+    background-color: #16aeff;
+    color: #C4E5FF;
+}
+
 .paginationButton {
     margin: 2px;
     font-family: Courier, serif;
