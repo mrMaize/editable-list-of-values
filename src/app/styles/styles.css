@@ -104,6 +104,20 @@ button {
     color: #C4E5FF;
 }
 
+.asc:after {
+    display: inline-block;
+    content: "\25B2";
+    position: absolute;
+    margin-left: 2px;
+}
+
+.desc:after {
+    display: inline-block;
+    content: "\25BC";
+    position: absolute;
+    margin-left: 2px;
+}
+
 .paginationButton {
     margin: 2px;
     font-family: Courier, serif;

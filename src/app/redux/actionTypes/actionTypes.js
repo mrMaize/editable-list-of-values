@@ -15,3 +15,5 @@ export const GO_TO_LAST_PAGE = "GO_TO_LAST_PAGE";
 export const GO_TO_FIRST_PAGE = "GO_TO_FIRST_PAGE";
 
 export const SET_SORT_ORDER = "SET_SORT_ORDER";
+
+export const TOGGLE_VIEW = "TOGGLE_VIEW";

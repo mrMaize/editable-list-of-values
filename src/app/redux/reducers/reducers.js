@@ -1,10 +1,9 @@
 import {combineReducers} from 'redux'
 import * as actionTypes from "../actionTypes/actionTypes";
-import {quickSort} from "../../tools/tools";
 
-const
-    asc = "ASC",
-    desc = "DESC";
+export const
+    asc = "asc",
+    desc = "desc";
 
 export const initialState = {
     data: {
@@ -14,7 +13,8 @@ export const initialState = {
         value: "",
         page: 1,
         rowsPerPage: 20,
-        sortOrder: ""
+        sortOrder: "",
+        toggleView: false
     },
     disabledButtons: false
 };
@@ -100,17 +100,15 @@ function data(state = {}, action) {
 
         case actionTypes.SET_SORT_ORDER:
 
-            const sortOrder = state.sortOrder === asc
-                ? desc
-                : asc;
+            const sortOrder = state.sortOrder === asc ? desc : asc;
+            const sortedData = sortByOrder(action.data, sortOrder);
 
-            //const sortedData = quickSort(state.data, sortOrder);
 
             return {
                 ...state,
                 sortOrder: sortOrder,
-                //data: sortData(state.data, sortOrder),
-                filteredData: getFilteredDataByFilters(state.data, state.label, state.value)
+                data: sortedData,
+                filteredData: getFilteredDataByFilters(sortedData, state.label, state.value)
             };
 
         default:
@@ -154,4 +152,11 @@ function getFilteredDataByFilters(data, label, value) {
     }
 
     return filteredData;
+}
+
+
+function sortByOrder(data, order) {
+    const sortedData = [];
+
+    return data;
 }

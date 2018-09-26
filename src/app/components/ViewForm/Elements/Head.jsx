@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {deleteRow, filterByValues, updateRow} from "../../../redux/thunk/thunk";
+import {deleteRow, filterByValues, sortData, updateRow} from "../../../redux/thunk/thunk";
 import {connect} from "react-redux";
 
 import "../../../styles/styles.css"
@@ -42,7 +42,7 @@ export default class Head extends Component {
     };
 
     onLabelClick = () => {
-        this.props.dispatch(actions.setSortOrder());
+        this.props.dispatch(sortData());
     };
 
     onSearchClick = () => {
@@ -60,8 +60,8 @@ export default class Head extends Component {
                     <tr>
                         <td>
                             <div className="borders">
-                                <div onClick={this.onLabelClick} className="label inline">Label</div>
-                                <div className={labelClassName}>Value</div>
+                                <div onClick={this.onLabelClick} className={labelClassName} >Label</div>
+                                <div className="label inline">Value</div>
                                 <div>
                                     <div className="inline">
                                         <input placeholder="Label to search" ref="searchLabel" type="text" className="searchInput"/>

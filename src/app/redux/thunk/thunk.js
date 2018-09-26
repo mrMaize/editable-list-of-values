@@ -1,5 +1,5 @@
 import * as actions from "../actions/actions";
-import {findRowNumber} from "../../tools/tools";
+import {asyncSort, findRowNumber} from "../../tools/tools";
 
 export function generateSet(value) {
     return dispatch => {
@@ -66,5 +66,18 @@ export function addNewValues(label, value) {
                 }
             ])
         );
+    }
+}
+
+export function sortData() {
+    return (dispatch, getState) => {
+
+        dispatch(actions.setSortOrder());
+        dispatch(actions.toggleView());
+
+        asyncSort(getState().data.data, getState().data.sortOrder).then(data => {
+            dispatch(actions.updateData(data));
+            dispatch(actions.toggleView());
+        })
     }
 }

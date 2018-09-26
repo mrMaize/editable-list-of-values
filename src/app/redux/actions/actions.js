@@ -79,3 +79,9 @@ export function setSortOrder() {
         type: actionTypes.SET_SORT_ORDER,
     }
 }
+
+export function toggleView() {
+    return {
+        type: actionTypes.TOGGLE_VIEW
+    }
+}
