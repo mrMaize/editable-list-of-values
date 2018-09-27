@@ -60,7 +60,7 @@ export default class Head extends Component {
                     <tr>
                         <td>
                             <div className="borders">
-                                <div onClick={this.onLabelClick} className={labelClassName} >Label</div>
+                                <div onClick={this.onLabelClick} className={labelClassName + " pointer"}>Label</div>
                                 <div className="label inline">Value</div>
                                 <div>
                                     <div className="inline">

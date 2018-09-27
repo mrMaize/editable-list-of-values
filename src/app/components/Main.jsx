@@ -81,7 +81,7 @@ export default class Main extends React.Component {
                                         className={"paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton")}
                                         disabled={this.disablePrevPageButton()} style={{display: 'inline'}}
                                         onClick={this.prevPage}>{"<"}</button>
-                                    <div style={{padding: '5px', display: 'inline'}}>{this.props.state.data.page}</div>
+                                    <div style={{padding: '5px', display: 'inline', fontFamily: 'Courier, serif'}}>{this.props.state.data.page}</div>
                                     <button
                                         className={"paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton")}
                                         style={{display: 'inline'}} disabled={this.disableNextPageButton()}

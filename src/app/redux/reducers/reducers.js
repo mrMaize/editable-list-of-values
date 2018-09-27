@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux'
 import * as actionTypes from "../actionTypes/actionTypes";
+import {asyncSort, sort} from "../../tools/tools";
 
 export const
     asc = "asc",
@@ -26,13 +27,13 @@ function data(state = {}, action) {
             return {
                 ...state,
                 data: action.data,
-                filteredData: getFilteredDataByFilters(action.data, state.label, state.value)
+                filteredData: getFilteredDataByFilters(action.data, state.label, state.value, state.sortOrder)
             };
 
         case actionTypes.SET_FILTERS:
             return {
                 ...state,
-                filteredData: getFilteredDataByFilters(state.data, action.filters.label, action.filters.value),
+                filteredData: getFilteredDataByFilters(state.data, action.filters.label, action.filters.value, state.sortOrder),
                 label: action.filters.label,
                 value: action.filters.value,
                 page: 1
@@ -71,12 +72,15 @@ function data(state = {}, action) {
 
         case actionTypes.ADD_DATA:
 
-            const filteredData = getFilteredDataByFilters(action.data, state.label, state.value);
+            const order = "";
+            const filteredData = getFilteredDataByFilters(action.data, state.label, state.value, order);
+
             return {
                 ...state,
                 data: action.data,
                 filteredData: filteredData,
-                page: Math.ceil(filteredData.length / state.rowsPerPage)
+                page: Math.ceil(filteredData.length / state.rowsPerPage),
+                sortOrder: order
             };
 
         case actionTypes.DELETE_ROW:
@@ -85,30 +89,25 @@ function data(state = {}, action) {
             return {
                 ...state,
                 data: action.data,
-                filteredData: getFilteredDataByFilters(action.data, state.label, state.value),
+                filteredData: getFilteredDataByFilters(action.data, state.label, state.value, state.sortOrder),
                 page: state.page > maxPage ? maxPage : state.page
             };
-
 
         case actionTypes.RESET_DATA:
             return {
                 ...state,
                 data: [],
-                filteredData: getFilteredDataByFilters(action.data, state.label, state.value)
+                filteredData: getFilteredDataByFilters(action.data, state.label, state.value, state.sortOrder)
 
             };
 
         case actionTypes.SET_SORT_ORDER:
-
             const sortOrder = state.sortOrder === asc ? desc : asc;
-            const sortedData = sortByOrder(action.data, sortOrder);
-
 
             return {
                 ...state,
                 sortOrder: sortOrder,
-                data: sortedData,
-                filteredData: getFilteredDataByFilters(sortedData, state.label, state.value)
+                page: 1
             };
 
         default:
@@ -136,7 +135,7 @@ export default manageData;
 
 
 
-function getFilteredDataByFilters(data, label, value) {
+function getFilteredDataByFilters(data, label, value, sortOrder) {
 
     let filteredData = [];
 
@@ -151,12 +150,6 @@ function getFilteredDataByFilters(data, label, value) {
         filteredData = data.filter( (data) => data.label === label);
     }
 
-    return filteredData;
-}
 
-
-function sortByOrder(data, order) {
-    const sortedData = [];
-
-    return data;
+    return sort(filteredData, sortOrder);
 }

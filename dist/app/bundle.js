@@ -25138,7 +25138,8 @@
 	        case actionTypes.SET_SORT_ORDER:
 	
 	            var sortOrder = state.sortOrder === asc ? desc : asc;
-	            var sortedData = sortByOrder(action.data, sortOrder);
+	            var sortedData = sortByOrder(state.data, sortOrder);
+	            console.log(sortedData);
 	
 	            return _extends({}, state, {
 	                sortOrder: sortOrder,
@@ -25509,7 +25510,6 @@
 	exports.deleteRow = deleteRow;
 	exports.updateRow = updateRow;
 	exports.addNewValues = addNewValues;
-	exports.sortData = sortData;
 	
 	var _actions = __webpack_require__(/*! ../actions/actions */ 224);
 	
@@ -25581,19 +25581,6 @@
 	            label: label,
 	            value: value
 	        }])));
-	    };
-	}
-	
-	function sortData() {
-	    return function (dispatch, getState) {
-	
-	        dispatch(actions.setSortOrder());
-	        dispatch(actions.toggleView());
-	
-	        (0, _tools.asyncSort)(getState().data.data, getState().data.sortOrder).then(function (data) {
-	            dispatch(actions.updateData(data));
-	            dispatch(actions.toggleView());
-	        });
 	    };
 	}
 
@@ -26625,7 +26612,7 @@
 	                value: value
 	            }));
 	        }, _this.onLabelClick = function () {
-	            _this.props.dispatch((0, _thunk.sortData)());
+	            _this.props.dispatch(actions.setSortOrder());
 	        }, _this.onSearchClick = function () {
 	            _this.setFilters();
 	        }, _temp), _possibleConstructorReturn(_this, _ret);

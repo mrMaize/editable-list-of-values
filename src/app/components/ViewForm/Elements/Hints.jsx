@@ -75,8 +75,7 @@ export default class extends Component {
                     "Search".
                     If nothing is shown, clear all inputs and hit Enter again.</p>
 
-                <p>6. You can sort data by column. Click the "Label" once or twice to see the result. Same with Value
-                    label </p>
+                <p>6. You can sort data by column. Click the "Label" once or twice to see the result.</p>
 
                 <p>7. Finally, you can add new data to the end of the list. Put values into field bellow and click the
                     button says "Add"</p>

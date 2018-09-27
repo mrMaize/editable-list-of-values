@@ -1,3 +1,5 @@
+import {asc} from "../redux/reducers/reducers";
+
 export function findRowNumber(id, data) {
 
     let guess,
@@ -15,4 +17,26 @@ export function findRowNumber(id, data) {
     }
 
     return -1;
+}
+
+
+export function sort(data, sort) {
+    let sortedData = data;
+
+    function compare(valA, valB, sortOrder) {
+
+        if (sortOrder === asc) {
+            return valA.label.localeCompare(valB.label)
+        } else {
+            return valB.label.localeCompare(valA.label)
+        }
+    }
+
+    if (sort !== "") {
+        sortedData = data.sort( (valA, valB) => {
+            return compare(valA, valB, sort)
+        });
+    }
+
+    return sortedData;
 }
