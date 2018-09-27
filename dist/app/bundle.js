@@ -63,17 +63,17 @@
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
-	var _reduxLogger = __webpack_require__(/*! redux-logger */ 220);
+	var _reduxLogger = __webpack_require__(/*! redux-logger */ 219);
 	
-	var _reduxDevtoolsExtension = __webpack_require__(/*! redux-devtools-extension */ 221);
+	var _reduxDevtoolsExtension = __webpack_require__(/*! redux-devtools-extension */ 220);
 	
 	var _redux = __webpack_require__(/*! redux */ 197);
 	
-	var _reduxThunk = __webpack_require__(/*! redux-thunk */ 222);
+	var _reduxThunk = __webpack_require__(/*! redux-thunk */ 221);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _Main = __webpack_require__(/*! ./components/Main */ 223);
+	var _Main = __webpack_require__(/*! ./components/Main */ 222);
 	
 	var _Main2 = _interopRequireDefault(_Main);
 	
@@ -25036,7 +25036,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.initialState = undefined;
+	exports.initialState = exports.desc = exports.asc = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -25046,12 +25046,10 @@
 	
 	var actionTypes = _interopRequireWildcard(_actionTypes);
 	
-	var _tools = __webpack_require__(/*! ../../tools/tools */ 219);
-	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
-	var asc = "ASC",
-	    desc = "DESC";
+	var asc = exports.asc = "asc",
+	    desc = exports.desc = "desc";
 	
 	var initialState = exports.initialState = {
 	    data: {
@@ -25061,7 +25059,8 @@
 	        value: "",
 	        page: 1,
 	        rowsPerPage: 20,
-	        sortOrder: ""
+	        sortOrder: "",
+	        toggleView: false
 	    },
 	    disabledButtons: false
 	};
@@ -25082,7 +25081,8 @@
 	            return _extends({}, state, {
 	                filteredData: getFilteredDataByFilters(state.data, action.filters.label, action.filters.value),
 	                label: action.filters.label,
-	                value: action.filters.value
+	                value: action.filters.value,
+	                page: 1
 	            });
 	
 	        case actionTypes.UPDATE_FILTERED_DATA:
@@ -25111,10 +25111,12 @@
 	            });
 	
 	        case actionTypes.ADD_DATA:
+	
+	            var filteredData = getFilteredDataByFilters(action.data, state.label, state.value);
 	            return _extends({}, state, {
 	                data: action.data,
-	                filteredData: getFilteredDataByFilters(action.data, state.label, state.value),
-	                page: Math.ceil(action.data.length / state.rowsPerPage)
+	                filteredData: filteredData,
+	                page: Math.ceil(filteredData.length / state.rowsPerPage)
 	            });
 	
 	        case actionTypes.DELETE_ROW:
@@ -25136,12 +25138,11 @@
 	        case actionTypes.SET_SORT_ORDER:
 	
 	            var sortOrder = state.sortOrder === asc ? desc : asc;
-	
-	            var sortedData = (0, _tools.quickSort)(state.data, sortOrder);
+	            var sortedData = sortByOrder(action.data, sortOrder);
 	
 	            return _extends({}, state, {
 	                sortOrder: sortOrder,
-	                //data: sortData(state.data, sortOrder),
+	                data: sortedData,
 	                filteredData: getFilteredDataByFilters(sortedData, state.label, state.value)
 	            });
 	
@@ -25193,6 +25194,12 @@
 	
 	    return filteredData;
 	}
+	
+	function sortByOrder(data, order) {
+	    var sortedData = [];
+	
+	    return data;
+	}
 
 /***/ }),
 /* 218 */
@@ -25222,80 +25229,11 @@
 	var GO_TO_FIRST_PAGE = exports.GO_TO_FIRST_PAGE = "GO_TO_FIRST_PAGE";
 	
 	var SET_SORT_ORDER = exports.SET_SORT_ORDER = "SET_SORT_ORDER";
+	
+	var TOGGLE_VIEW = exports.TOGGLE_VIEW = "TOGGLE_VIEW";
 
 /***/ }),
 /* 219 */
-/*!********************************!*\
-  !*** ./src/app/tools/tools.js ***!
-  \********************************/
-/***/ (function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.findRowNumber = findRowNumber;
-	exports.quickSort = quickSort;
-	function findRowNumber(id, data) {
-	
-	    var guess = void 0,
-	        min = 0,
-	        max = data.length - 1;
-	
-	    while (min <= max) {
-	        guess = Math.floor((min + max) / 2);
-	        if (data[guess].id === id) return guess;else if (data[guess].id < id) min = guess + 1;else max = guess - 1;
-	    }
-	
-	    return -1;
-	}
-	
-	function partition(items, left, right) {
-	    var pivot = items[Math.floor((right + left) / 2)],
-	        i = left,
-	        j = right;
-	
-	    while (i <= j) {
-	        while (items[i] < pivot) {
-	            i++;
-	        }
-	        while (items[j] > pivot) {
-	            j--;
-	        }
-	        if (i <= j) {
-	            swap(items, i, j);
-	            i++;
-	            j--;
-	        }
-	    }
-	    return i;
-	}
-	
-	function swap(items, firstIndex, secondIndex) {
-	    var temp = items[firstIndex];
-	    items[firstIndex] = items[secondIndex];
-	    items[secondIndex] = temp;
-	}
-	
-	function quickSort(items, left, right) {
-	    var index = void 0;
-	    if (items.length > 1) {
-	        left = typeof left !== "number" ? 0 : left;
-	        right = typeof right !== "number" ? items.length - 1 : right;
-	        index = partition(items, left, right);
-	        if (left < index - 1) {
-	            quickSort(items, left, index - 1);
-	        }
-	        if (index < right) {
-	            quickSort(items, index, right);
-	        }
-	    }
-	    return items;
-	}
-
-/***/ }),
-/* 220 */
 /*!*********************************************!*\
   !*** ./~/redux-logger/dist/redux-logger.js ***!
   \*********************************************/
@@ -25306,7 +25244,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
-/* 221 */
+/* 220 */
 /*!*********************************************!*\
   !*** ./~/redux-devtools-extension/index.js ***!
   \*********************************************/
@@ -25335,7 +25273,7 @@
 
 
 /***/ }),
-/* 222 */
+/* 221 */
 /*!************************************!*\
   !*** ./~/redux-thunk/lib/index.js ***!
   \************************************/
@@ -25366,7 +25304,7 @@
 	exports['default'] = thunk;
 
 /***/ }),
-/* 223 */
+/* 222 */
 /*!*************************************!*\
   !*** ./src/app/components/Main.jsx ***!
   \*************************************/
@@ -25389,7 +25327,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 184);
 	
-	var _thunk = __webpack_require__(/*! ../redux/thunk/thunk */ 224);
+	var _thunk = __webpack_require__(/*! ../redux/thunk/thunk */ 223);
 	
 	var _Row = __webpack_require__(/*! ./ViewForm/Elements/Row */ 226);
 	
@@ -25403,7 +25341,7 @@
 	
 	var _Hints2 = _interopRequireDefault(_Hints);
 	
-	var _actions = __webpack_require__(/*! ../redux/actions/actions */ 225);
+	var _actions = __webpack_require__(/*! ../redux/actions/actions */ 224);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
@@ -25439,26 +25377,7 @@
 	            args[_key] = arguments[_key];
 	        }
 	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	            value: '',
-	            defaultValue: 10000
-	        }, _this.onChangeRange = function (event) {
-	            _this.setState({
-	                value: event.target.value
-	            });
-	        }, _this.onClickGenerateSet = function () {
-	
-	            if (_this.state.value === '') {
-	                _this.props.dispatch((0, _thunk.generateSet)(_this.state.defaultValue));
-	            } else {
-	                try {
-	                    var value = parseInt(_this.state.value);
-	                    _this.props.dispatch((0, _thunk.generateSet)(value));
-	                } catch (e) {
-	                    alert('only numeric input is allowed');
-	                }
-	            }
-	        }, _this.nextPage = function () {
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.nextPage = function () {
 	            _this.props.dispatch(actions.goToTheNextPage());
 	        }, _this.lastPage = function () {
 	            _this.props.dispatch(actions.goToLastPage());
@@ -25490,12 +25409,6 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "inline" },
-	                    _react2.default.createElement("input", { placeholder: '10000', type: 'text', onChange: this.onChangeRange, readOnly: this.props.state.data.data.length > 0 }),
-	                    _react2.default.createElement(
-	                        "button",
-	                        { onClick: this.onClickGenerateSet, disabled: this.props.state.data.data.length > 0 },
-	                        "Generate"
-	                    ),
 	                    this.props.state.data.data && this.props.state.data.data.length > 0 ? _react2.default.createElement(
 	                        "div",
 	                        { style: {
@@ -25515,7 +25428,10 @@
 	                                        _react2.default.createElement(
 	                                            "td",
 	                                            null,
-	                                            _react2.default.createElement(_Row2.default, { row: row, index: (_this2.props.state.data.page - 1) * _this2.props.state.data.rowsPerPage + index, page: _this2.props.state.data.page, rowsPerPage: _this2.props.state.data.rowsPerPage })
+	                                            _react2.default.createElement(_Row2.default, { row: row,
+	                                                index: (_this2.props.state.data.page - 1) * _this2.props.state.data.rowsPerPage + index,
+	                                                page: _this2.props.state.data.page,
+	                                                rowsPerPage: _this2.props.state.data.rowsPerPage })
 	                                        )
 	                                    );
 	                                })
@@ -25526,12 +25442,18 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                "button",
-	                                { className: "paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton"), disabled: this.disablePrevPageButton(), style: { display: 'inline' }, onClick: this.firstPage },
+	                                {
+	                                    className: "paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton"),
+	                                    disabled: this.disablePrevPageButton(), style: { display: 'inline' },
+	                                    onClick: this.firstPage },
 	                                "<<"
 	                            ),
 	                            _react2.default.createElement(
 	                                "button",
-	                                { className: "paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton"), disabled: this.disablePrevPageButton(), style: { display: 'inline' }, onClick: this.prevPage },
+	                                {
+	                                    className: "paginationButton " + (this.disablePrevPageButton() ? "disabledButton" : "enabledButton"),
+	                                    disabled: this.disablePrevPageButton(), style: { display: 'inline' },
+	                                    onClick: this.prevPage },
 	                                "<"
 	                            ),
 	                            _react2.default.createElement(
@@ -25541,12 +25463,18 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                "button",
-	                                { className: "paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton"), style: { display: 'inline' }, disabled: this.disableNextPageButton(), onClick: this.nextPage },
+	                                {
+	                                    className: "paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton"),
+	                                    style: { display: 'inline' }, disabled: this.disableNextPageButton(),
+	                                    onClick: this.nextPage },
 	                                ">"
 	                            ),
 	                            _react2.default.createElement(
 	                                "button",
-	                                { className: "paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton"), style: { display: 'inline' }, disabled: this.disableNextPageButton(), onClick: this.lastPage },
+	                                {
+	                                    className: "paginationButton " + (this.disableNextPageButton() ? "disabledButton" : "enabledButton"),
+	                                    style: { display: 'inline' }, disabled: this.disableNextPageButton(),
+	                                    onClick: this.lastPage },
 	                                ">>"
 	                            )
 	                        )
@@ -25566,7 +25494,7 @@
 	exports.default = Main;
 
 /***/ }),
-/* 224 */
+/* 223 */
 /*!**************************************!*\
   !*** ./src/app/redux/thunk/thunk.js ***!
   \**************************************/
@@ -25581,12 +25509,13 @@
 	exports.deleteRow = deleteRow;
 	exports.updateRow = updateRow;
 	exports.addNewValues = addNewValues;
+	exports.sortData = sortData;
 	
-	var _actions = __webpack_require__(/*! ../actions/actions */ 225);
+	var _actions = __webpack_require__(/*! ../actions/actions */ 224);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _tools = __webpack_require__(/*! ../../tools/tools */ 219);
+	var _tools = __webpack_require__(/*! ../../tools/tools */ 225);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -25654,9 +25583,22 @@
 	        }])));
 	    };
 	}
+	
+	function sortData() {
+	    return function (dispatch, getState) {
+	
+	        dispatch(actions.setSortOrder());
+	        dispatch(actions.toggleView());
+	
+	        (0, _tools.asyncSort)(getState().data.data, getState().data.sortOrder).then(function (data) {
+	            dispatch(actions.updateData(data));
+	            dispatch(actions.toggleView());
+	        });
+	    };
+	}
 
 /***/ }),
-/* 225 */
+/* 224 */
 /*!******************************************!*\
   !*** ./src/app/redux/actions/actions.js ***!
   \******************************************/
@@ -25679,6 +25621,7 @@
 	exports.addData = addData;
 	exports.deleteRow = deleteRow;
 	exports.setSortOrder = setSortOrder;
+	exports.toggleView = toggleView;
 	
 	var _actionTypes = __webpack_require__(/*! ../actionTypes/actionTypes */ 218);
 	
@@ -25764,6 +25707,39 @@
 	        type: actionTypes.SET_SORT_ORDER
 	    };
 	}
+	
+	function toggleView() {
+	    return {
+	        type: actionTypes.TOGGLE_VIEW
+	    };
+	}
+
+/***/ }),
+/* 225 */
+/*!********************************!*\
+  !*** ./src/app/tools/tools.js ***!
+  \********************************/
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.findRowNumber = findRowNumber;
+	function findRowNumber(id, data) {
+	
+	    var guess = void 0,
+	        min = 0,
+	        max = data.length - 1;
+	
+	    while (min <= max) {
+	        guess = Math.floor((min + max) / 2);
+	        if (data[guess].id === id) return guess;else if (data[guess].id < id) min = guess + 1;else max = guess - 1;
+	    }
+	
+	    return -1;
+	}
 
 /***/ }),
 /* 226 */
@@ -25787,13 +25763,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _thunk = __webpack_require__(/*! ../../../redux/thunk/thunk */ 224);
+	var _thunk = __webpack_require__(/*! ../../../redux/thunk/thunk */ 223);
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 184);
 	
 	__webpack_require__(/*! ../../../styles/styles.css */ 227);
 	
-	var _actions = __webpack_require__(/*! ../../../redux/actions/actions */ 225);
+	var _actions = __webpack_require__(/*! ../../../redux/actions/actions */ 224);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
@@ -25995,7 +25971,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".buttonEdit {\n    background-color: #dddb4e;\n    opacity: 0.5;\n}\n\n.buttonEdit:hover {\n    background-color: yellow;\n    opacity: 1;\n}\n\n.buttonDelete {\n    background-color: lightsalmon;\n    opacity: 0.5\n}\n\n.buttonDelete:hover {\n    background-color: lightcoral;\n    opacity: 1\n}\n\n.buttonSave {\n    background-color: aquamarine;\n    font-family: Courier, serif;\n}\n\n.buttonSave:hover {\n    background-color: lightgreen;\n    font-family: Courier, serif;\n}\n\n.button {\n    width: 50px;\n}\n\n.searchInput {\n    width: 145px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.borders {\n    border-bottom: 1px solid;\n    border-top: 1px solid;}\n\n.label {\n    width: 150px;\n    font-family: Courier, serif;\n}\n\n.input {\n    outline: none;\n    border: none;\n    background: none;\n    width: 150px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.boldInput {\n    font-weight: bold;\n    outline: none;\n    border: none;\n    background: none;\n    width: 150px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.disabledInput {\n    color: lightgrey;\n    outline: none;\n    border: none;\n    background: none;\n    width: 150px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.enabledButton {\n    background-color: #C4E5FF;\n    font-weight: bold;\n}\n\n.disabledButton {\n    background-color: aliceblue;\n}\n\nbutton {\n    border: none;\n    outline: none;\n    background-color: lightgreen;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.paginationButton {\n    margin: 2px;\n    font-family: Courier, serif;\n    font-size: 14px;\n}\n\n.inline {\n    display: inline-table;\n}\n\n.hintBlock {\n    border: 3px dashed darkcyan;\n    padding: 50px;\n    position: absolute;\n    font-family: Courier, serif;\n    font-size: 14px;\n    margin-left: 50px;\n    text-align: left;\n    max-width: 500px;\n}\n\n.addContainer {\n    border: 2px dashed darkRed;\n    margin-top: 5px;\n    padding: 10px;\n    font-family: Courier, serif;\n    font-size: 14px;\n    text-align: left;\n    text-decoration: grey\n}\n\n.newValueInput {\n    width: 200px;\n    font-family: Courier, serif;\n    font-size: 18px;\n    padding: 2px;\n    margin-right: 2px;\n}\n\n.add-button {\n    font-family: Courier, serif;\n    font-size: 18px;\n}\n\n", ""]);
+	exports.push([module.id, ".buttonEdit {\n    background-color: #dddb4e;\n    opacity: 0.5;\n}\n\n.buttonEdit:hover {\n    background-color: yellow;\n    opacity: 1;\n}\n\n.buttonDelete {\n    background-color: lightsalmon;\n    opacity: 0.5\n}\n\n.buttonDelete:hover {\n    background-color: lightcoral;\n    opacity: 1\n}\n\n.buttonSave {\n    background-color: aquamarine;\n    font-family: Courier, serif;\n}\n\n.buttonSave:hover {\n    background-color: lightgreen;\n    font-family: Courier, serif;\n}\n\n.button {\n    width: 50px;\n}\n\n.searchInput {\n    width: 145px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.borders {\n    border-bottom: 1px solid;\n    border-top: 1px solid;}\n\n.label {\n    width: 150px;\n    font-family: Courier, serif;\n}\n\n.input {\n    outline: none;\n    border: none;\n    background: none;\n    width: 150px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.boldInput {\n    font-weight: bold;\n    outline: none;\n    border: none;\n    background: none;\n    width: 150px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.disabledInput {\n    color: lightgrey;\n    outline: none;\n    border: none;\n    background: none;\n    width: 150px;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.enabledButton {\n    background-color: #C4E5FF;\n    font-weight: bold;\n}\n\n.disabledButton {\n    background-color: aliceblue;\n}\n\nbutton {\n    border: none;\n    outline: none;\n    background-color: lightgreen;\n    font-family: Courier, serif;\n    font-size: 12px;\n}\n\n.searchButton {\n    width: 105px;\n    background-color: dodgerblue;\n    color: #C4E5FF;\n}\n\n.searchButton:hover {\n    background-color: #16aeff;\n    color: #C4E5FF;\n}\n\n.asc:after {\n    display: inline-block;\n    content: \"\\25B2\";\n    position: absolute;\n    margin-left: 2px;\n}\n\n.desc:after {\n    display: inline-block;\n    content: \"\\25BC\";\n    position: absolute;\n    margin-left: 2px;\n}\n\n.paginationButton {\n    margin: 2px;\n    font-family: Courier, serif;\n    font-size: 14px;\n}\n\n.inline {\n    display: inline-table;\n}\n\n.hintBlock {\n    border: 3px dashed darkcyan;\n    padding: 50px;\n    position: absolute;\n    font-family: Courier, serif;\n    font-size: 14px;\n    margin-left: 50px;\n    text-align: left;\n    max-width: 500px;\n}\n\n.addContainer {\n    border: 2px dashed darkRed;\n    margin-top: 5px;\n    padding: 10px;\n    font-family: Courier, serif;\n    font-size: 14px;\n    text-align: left;\n    text-decoration: grey\n}\n\n.newValueInput {\n    width: 200px;\n    font-family: Courier, serif;\n    font-size: 18px;\n    padding: 2px;\n    margin-right: 2px;\n}\n\n.add-button {\n    font-family: Courier, serif;\n    font-size: 18px;\n}\n\n", ""]);
 	
 	// exports
 
@@ -26594,13 +26570,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _thunk = __webpack_require__(/*! ../../../redux/thunk/thunk */ 224);
+	var _thunk = __webpack_require__(/*! ../../../redux/thunk/thunk */ 223);
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 184);
 	
 	__webpack_require__(/*! ../../../styles/styles.css */ 227);
 	
-	var _actions = __webpack_require__(/*! ../../../redux/actions/actions */ 225);
+	var _actions = __webpack_require__(/*! ../../../redux/actions/actions */ 224);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
@@ -26637,18 +26613,21 @@
 	        }
 	
 	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Head.__proto__ || Object.getPrototypeOf(Head)).call.apply(_ref, [this].concat(args))), _this), _this.onKeyDown = function (event) {
-	
+	            if (event.key === "Enter") {
+	                _this.setFilters();
+	            }
+	        }, _this.setFilters = function () {
 	            var label = _this.refs.searchLabel.value;
 	            var value = _this.refs.searchValue.value;
 	
-	            if (event.key === "Enter") {
-	                _this.props.dispatch(actions.setFilters({
-	                    label: label,
-	                    value: value
-	                }));
-	            }
+	            _this.props.dispatch(actions.setFilters({
+	                label: label,
+	                value: value
+	            }));
 	        }, _this.onLabelClick = function () {
-	            _this.props.dispatch(actions.setSortOrder());
+	            _this.props.dispatch((0, _thunk.sortData)());
+	        }, _this.onSearchClick = function () {
+	            _this.setFilters();
 	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 	
@@ -26685,12 +26664,12 @@
 	                                { className: "borders" },
 	                                _react2.default.createElement(
 	                                    "div",
-	                                    { onClick: this.onLabelClick, className: "label inline" },
+	                                    { onClick: this.onLabelClick, className: labelClassName },
 	                                    "Label"
 	                                ),
 	                                _react2.default.createElement(
 	                                    "div",
-	                                    { className: labelClassName },
+	                                    { className: "label inline" },
 	                                    "Value"
 	                                ),
 	                                _react2.default.createElement(
@@ -26705,6 +26684,15 @@
 	                                        "div",
 	                                        { className: "inline" },
 	                                        _react2.default.createElement("input", { placeholder: "Value to search", ref: "searchValue", type: "text", className: "searchInput" })
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "inline" },
+	                                        _react2.default.createElement(
+	                                            "button",
+	                                            { className: "searchButton", onClick: this.onSearchClick },
+	                                            "Search"
+	                                        )
 	                                    )
 	                                )
 	                            )
@@ -26743,7 +26731,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 184);
 	
-	var _thunk = __webpack_require__(/*! ../../../redux/thunk/thunk */ 224);
+	var _thunk = __webpack_require__(/*! ../../../redux/thunk/thunk */ 223);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -26775,7 +26763,9 @@
 	            args[_key] = arguments[_key];
 	        }
 	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _default.__proto__ || Object.getPrototypeOf(_default)).call.apply(_ref, [this].concat(args))), _this), _this.onAddNewValue = function () {
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _default.__proto__ || Object.getPrototypeOf(_default)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	            defaultValue: 10000
+	        }, _this.onAddNewValue = function () {
 	            var newLabel = _this.refs.newLabel.value,
 	                newValue = _this.refs.newValue.value;
 	
@@ -26783,6 +26773,18 @@
 	                _this.props.dispatch((0, _thunk.addNewValues)(newLabel, newValue));
 	            } else {
 	                alert("Emprty strings are not allowed!");
+	            }
+	        }, _this.onClickGenerateSet = function () {
+	
+	            if (_this.refs.valRange.value === '') {
+	                _this.props.dispatch((0, _thunk.generateSet)(_this.state.defaultValue));
+	            } else {
+	                try {
+	                    var value = parseInt(_this.refs.valRange.value);
+	                    _this.props.dispatch((0, _thunk.generateSet)(value));
+	                } catch (e) {
+	                    alert('only numeric input is allowed');
+	                }
 	            }
 	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
@@ -26807,6 +26809,14 @@
 	                    "p",
 	                    null,
 	                    "1. Press green button says \"Generate\" to create a random array. It will generate a 10 000 items array by default. You can also enter a cutom value into textfeld next to it. "
+	                ),
+	                _react2.default.createElement("input", { placeholder: this.state.defaultValue, ref: "valRange", className: "newValueInput", type: 'text',
+	                    readOnly: this.props.state.data.data.length > 0 }),
+	                _react2.default.createElement(
+	                    "button",
+	                    { onClick: this.onClickGenerateSet, className: "add-button",
+	                        disabled: this.props.state.data.data.length > 0 },
+	                    "Generate"
 	                ),
 	                _react2.default.createElement(
 	                    "p",
@@ -26846,7 +26856,7 @@
 	                            "Value"
 	                        )
 	                    ),
-	                    " and press Enter. If nothing is shown, clear all inputs and hit Enter again."
+	                    " and press Enter or click blue button says \"Search\". If nothing is shown, clear all inputs and hit Enter again."
 	                ),
 	                _react2.default.createElement(
 	                    "p",
@@ -26856,16 +26866,17 @@
 	                _react2.default.createElement(
 	                    "p",
 	                    null,
-	                    "7. Finally, you can add new data to the end of the list. Put values into field bello and click the button says \"Add\""
+	                    "7. Finally, you can add new data to the end of the list. Put values into field bellow and click the button says \"Add\""
 	                ),
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "addContainer" },
-	                    _react2.default.createElement("input", { placeholder: "Label", className: "newValueInput", ref: "newLabel" }),
-	                    _react2.default.createElement("input", { placeholder: "Value", className: "newValueInput", ref: "newValue" }),
+	                    _react2.default.createElement("input", { placeholder: "New Label", className: "newValueInput", ref: "newLabel" }),
+	                    _react2.default.createElement("input", { placeholder: "New Value", className: "newValueInput", ref: "newValue" }),
 	                    _react2.default.createElement(
 	                        "button",
-	                        { disabled: this.props.state.data.data.length === 0, onClick: this.onAddNewValue, className: "add-button" },
+	                        { disabled: this.props.state.data.data.length === 0, onClick: this.onAddNewValue,
+	                            className: "add-button" },
 	                        "Add"
 	                    )
 	                )
