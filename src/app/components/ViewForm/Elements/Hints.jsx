@@ -32,15 +32,17 @@ export default class extends Component {
 
     onClickGenerateSet = () => {
 
-        if (this.refs.valRange.value === '') {
+        const inputValue = this.refs.valRange.value;
+
+        if (inputValue === '') {
             this.props.dispatch(generateSet(this.state.defaultValue));
 
         } else {
-            try {
+            if (inputValue.match(/^\d+$/)) {
                 const value = parseInt(this.refs.valRange.value);
                 this.props.dispatch(generateSet(value));
 
-            } catch (e) {
+            } else {
                 alert('only numeric input is allowed');
 
             }
