@@ -26,7 +26,7 @@ export function generateSet(value) {
 export function deleteRow(rowId) {
   return (dispatch, getState) => {
     const data = getState().data.data;
-    const filteredData = data.filter((data, index) => data.id !== rowId);
+    const filteredData = data.filter(data => data.id !== rowId);
     dispatch(actions.deleteRow(filteredData));
   };
 }
