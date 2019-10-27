@@ -10,7 +10,17 @@ import Main from "./app/components/Main";
 
 const middleWare = [];
 middleWare.push(thunk);
-middleWare.push(createLogger());
+middleWare.push(
+  createLogger({
+    duration: true,
+    level: "info",
+    collapsed: true,
+    colors: {
+      title: () => "#299bd8",
+      nextState: () => "#299bd8"
+    }
+  })
+);
 
 const store = createStore(
   manageData,

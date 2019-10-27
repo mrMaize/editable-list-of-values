@@ -2,8 +2,8 @@ import { combineReducers } from "redux";
 import * as actionTypes from "../actionTypes/actionTypes";
 import { sort } from "../../tools/tools";
 
-export const asc = "asc",
-  desc = "desc";
+export const asc = "asc";
+export const desc = "desc";
 
 export const initialState = {
   data: {
