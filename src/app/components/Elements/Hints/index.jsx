@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addNewValues, generateSet } from "../../../utils/redux/thunk/thunk";
+import { addNewValues, generateSet } from "../../../../utils/redux/thunk/thunk";
 
 class Hints extends Component {
   state = {
@@ -11,17 +11,17 @@ class Hints extends Component {
     const newLabel = this.refs.newLabel.value,
       newValue = this.refs.newValue.value;
 
-    if (newLabel !== "" || newValue !== "") {
+    if (newLabel !== '' || newValue !== '') {
       this.props.dispatch(addNewValues(newLabel, newValue));
     } else {
-      alert("Emprty strings are not allowed!");
+      alert("Empty strings are not allowed!");
     }
   };
 
   onClickGenerateSet = () => {
     const inputValue = this.refs.valRange.value;
 
-    if (inputValue === "") {
+    if (inputValue === '') {
       this.props.dispatch(generateSet(this.state.defaultValue));
     } else {
       if (inputValue.match(/^\d+$/)) {
@@ -42,7 +42,7 @@ class Hints extends Component {
         <p>
           1. Press green button says "Generate" to create a random array. It
           will generate a 10 000 items array by default. You can also enter a
-          cutom value into textfeld next to it.{" "}
+          custom value into text field next to it.{' '}
         </p>
         <input
           placeholder={this.state.defaultValue}
