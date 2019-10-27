@@ -1,5 +1,5 @@
 import * as actions from "../actions/actions";
-import { asyncSort, findRowNumber, sort } from "../../tools/tools";
+import { findRowNumber, sort } from "../../tools/tools";
 
 export function generateSet(value) {
   return dispatch => {
@@ -18,7 +18,7 @@ export function generateSet(value) {
     }
 
     for (let i = 0; i < value; i++) {
-      valArray.push(new Object(i, randomInteger(0, value)));
+      valArray.push(Object(i, randomInteger(0, value)));
     }
 
     dispatch(actions.updateData(valArray));

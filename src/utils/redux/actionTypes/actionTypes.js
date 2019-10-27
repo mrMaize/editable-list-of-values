@@ -4,7 +4,6 @@ export const RESET_DATA = "RESET_DATA";
 export const ADD_DATA = "ADD_DATA";
 export const DELETE_ROW = "DELETE_ROW";
 
-
 export const DISABLE_BUTTONS = "DISABLE_BUTTONS";
 
 export const SET_FILTERS = "SET_FILTERS";
